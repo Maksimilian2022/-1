@@ -1,7 +1,7 @@
 import requests
 import json
 import configparser
-access_token = 'vk1.a.FOPeogRotD8mxzUyIs1li1ENNH19zPZRy1nWnJHcR8Bj6nHOQSyraeCCtgNEJbZc4a1ZZVaAQVq7TYIM37R-VIKGMJ59PBLMbodtOhflLfv_r7iPM8R0DZukNT6fe6fCqu_oBnUXz0v_v25EgT9z_ofRhJfBq1Oeub81djXC0cs6dINYLX3OJ5OSUDCXQTCv'
+
 
 def config_data(need_token):
     config = configparser.ConfigParser()
@@ -14,7 +14,6 @@ def get_photo():
     user_id = input('Введите id ')
     token = config_data('vk_token')
     access_token = config_data('vk_access_token')
-    print(access_token)
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {token}'}
     if user_id.isdigit() != True:
         url = 'https://api.vk.com/method/users.get'

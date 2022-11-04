@@ -1,19 +1,18 @@
 import requests
 import json
 import configparser
+vk_token = 'vk1.a.FOPeogRotD8mxzUyIs1li1ENNH19zPZRy1nWnJHcR8Bj6nHOQSyraeCCtgNEJbZc4a1ZZVaAQVq7TYIM37R-VIKGMJ59PBLMbodtOhflLfv_r7iPM8R0DZukNT6fe6fCqu_oBnUXz0v_v25EgT9z_ofRhJfBq1Oeub81djXC0cs6dINYLX3OJ5OSUDCXQTCv'
 
 
 def config_data(need_token):
     config = configparser.ConfigParser()
     config.read("settings.ini")
-    return config['VK'][need_token]
-
+    return config['VK_YN'][need_token]
 
 
 def get_photo():
     user_id = input('Введите id ')
     token = config_data('vk_token')
-    access_token = config_data('vk_access_token')
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {token}'}
     if user_id.isdigit() != True:
         url = 'https://api.vk.com/method/users.get'
@@ -23,8 +22,8 @@ def get_photo():
     amount_photo = input('Введите колличество фото ')
     photos_dict = {}
     url = 'https://api.vk.com/method/photos.get'
-    params = {f"owner_id": user_id, 'album_id': 'profile', 'access_token': access_token, 'v': '5.81', 'extended': '1', 'count': amount_photo, 'photo_sizes': '1'}
-    response = requests.get(url, params=params)
+    params = {f"owner_id": user_id, 'album_id': 'profile', 'access_token': token, 'v': '5.81', 'extended': '1', 'count': amount_photo, 'photo_sizes': '1'}
+    response = requests.get(url, params=params, headers=headers)
     for photo_max_size in response.json()['response']['items']:
         if photo_max_size.get('date') in photos_dict.values():
             photos_dict[photo_max_size['sizes'][-1]['url']] = [{"file_name": photo_max_size['likes']['count'] + '.' + photo_max_size.get('date'), "size": photo_max_size['sizes'][-1]['type']}]
@@ -39,7 +38,7 @@ def get_photo():
 
 def post_ydisk():
     photo_path = input('Введите имя папки ')
-    token = config_data('vk_token')
+    token = config_data('y_token')
     y_url = f'https://cloud-api.yandex.net/v1/disk/resources/upload'
     y_url_add_folder = 'https://cloud-api.yandex.net/v1/disk/resources'
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': f'OAuth {token}'}
@@ -54,3 +53,4 @@ def post_ydisk():
     return
 
 post_ydisk()
+
